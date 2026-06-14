@@ -1,0 +1,5 @@
+der | Beruf | profession; job | einen Beruf wählen; im Beruf arbeiten | plural: Berufe | Welchen Beruf möchtest du später haben?
+die | Entscheidung | decision; choice | eine Entscheidung treffen; eine Entscheidung bereuen | plural: Entscheidungen | Ich muss heute eine wichtige Entscheidung treffen.
+das | Gesetz | law | ein Gesetz verabschieden; gegen das Gesetz verstoßen | plural: Gesetze | Das neue Gesetz tritt im Juli in Kraft.
+ | nehmen / nahm / genommen | to take | den Zug nehmen; etwas mitnehmen | strong verb | Ich nehme heute den Zug.
+ | sprechen / sprach / gesprochen | to speak | Deutsch sprechen; mit jemandem sprechen | strong verb | Wir sprechen jeden Tag Deutsch.
