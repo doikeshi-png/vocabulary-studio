@@ -1,0 +1,1353 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vocabulary Studio — English & German карточки</title>
+  <!-- Standalone version: CSS and JavaScript are embedded, so the design works even from a downloaded HTML file. -->
+  <style>
+:root {
+  --bg: #f7efe8;
+  --bg-2: #eee5dc;
+  --panel: rgba(255, 252, 247, 0.88);
+  --panel-solid: #fffaf4;
+  --text: #251d1a;
+  --muted: #766c65;
+  --soft: #f2e5d8;
+  --line: rgba(67, 47, 36, 0.12);
+  --primary: #8a3f3f;
+  --primary-dark: #5b292f;
+  --accent: #d79f52;
+  --accent-soft: #f8e0bb;
+  --success: #3c7a5a;
+  --warning: #b07324;
+  --danger: #a33a34;
+  --white: #ffffff;
+  --shadow: 0 24px 70px rgba(59, 40, 26, 0.14);
+  --shadow-soft: 0 12px 32px rgba(59, 40, 26, 0.10);
+  --radius-xl: 34px;
+  --radius-lg: 26px;
+  --radius-md: 18px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;
+  background:
+    radial-gradient(circle at 10% 8%, rgba(215, 159, 82, .38), transparent 28rem),
+    radial-gradient(circle at 90% 16%, rgba(138, 63, 63, .18), transparent 30rem),
+    linear-gradient(135deg, var(--bg), var(--bg-2));
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(rgba(255,255,255,.24) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.22) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,.65), transparent 78%);
+}
+
+button, input, textarea, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+
+.app-shell {
+  width: min(1200px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 26px 0 70px;
+  position: relative;
+}
+
+.hero,
+.panel {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.hero {
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  margin-bottom: 22px;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  right: -190px;
+  top: -190px;
+  border-radius: 50%;
+  background: rgba(215, 159, 82, .22);
+}
+
+.topbar,
+.hero-grid,
+.panel { position: relative; z-index: 1; }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 42px;
+}
+
+.brand-mark {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  box-shadow: var(--shadow-soft);
+  font-weight: 950;
+  letter-spacing: -.06em;
+}
+
+.brand-copy { display: grid; line-height: 1.12; }
+.brand-copy strong { font-size: 16px; }
+.brand-copy span { color: var(--muted); font-size: 13px; }
+.ghost-link { margin-left: auto; color: var(--primary-dark); text-decoration: none; font-weight: 800; padding: 10px 14px; border-radius: 999px; background: rgba(255,255,255,.54); border: 1px solid var(--line); }
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, .55fr);
+  gap: 24px;
+  align-items: end;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: .13em;
+}
+
+h1, h2, h3, p { overflow-wrap: anywhere; }
+h1 {
+  max-width: 860px;
+  margin: 0;
+  font-size: clamp(42px, 6.4vw, 78px);
+  line-height: .91;
+  letter-spacing: -.07em;
+}
+h2 { margin: 0; font-size: clamp(28px, 4vw, 42px); line-height: 1; letter-spacing: -.05em; }
+h3 { margin: 0; font-size: 20px; letter-spacing: -.02em; }
+.lead { max-width: 790px; margin: 22px 0 0; color: #544840; font-size: 19px; line-height: 1.55; }
+.muted { color: var(--muted); }
+
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+.primary-link, button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  min-height: 44px;
+  padding: 12px 18px;
+  color: var(--text);
+  background: rgba(255,255,255,.76);
+  font-weight: 850;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .16s ease, box-shadow .16s ease, background .16s ease, border-color .16s ease;
+}
+button:hover, .primary-link:hover { transform: translateY(-1px); box-shadow: var(--shadow-soft); }
+button:active, .primary-link:active { transform: translateY(0); }
+.primary-link, button.primary { color: #fff; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-color: rgba(91,41,47,.28); }
+button.soft { background: rgba(255,255,255,.64); }
+button.success { color: #fff; background: var(--success); }
+button.warning { color: #fff; background: var(--warning); }
+button.danger { color: #fff; background: var(--danger); }
+button.tiny { min-height: 34px; padding: 8px 12px; font-size: 13px; background: var(--accent-soft); color: var(--primary-dark); }
+
+.method-card {
+  min-height: 290px;
+  padding: 26px;
+  border-radius: 30px;
+  border: 1px solid rgba(255,255,255,.62);
+  background: linear-gradient(145deg, rgba(255,255,255,.78), rgba(248,224,187,.72));
+  box-shadow: var(--shadow-soft);
+}
+.mini-label { display: inline-flex; margin-bottom: 14px; color: var(--primary-dark); font-size: 13px; font-weight: 950; text-transform: uppercase; letter-spacing: .08em; }
+.method-card ol { margin: 0; padding-left: 22px; display: grid; gap: 12px; color: #493d35; font-weight: 700; line-height: 1.35; }
+
+.panel { border-radius: var(--radius-xl); padding: 26px; margin-bottom: 22px; }
+.section-head, .study-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
+.pill { align-self: center; border-radius: 999px; padding: 8px 12px; color: var(--primary-dark); background: rgba(248,224,187,.75); font-weight: 900; font-size: 13px; }
+.import-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(290px, .72fr); gap: 22px; }
+.creator-card, .format-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  background: rgba(255,255,255,.62);
+}
+.field-label { display: block; margin: 0 0 8px; font-weight: 900; }
+.field-label + input, .field-label + textarea { margin-bottom: 16px; }
+input[type="text"], textarea, select {
+  width: 100%;
+  border: 1px solid rgba(67, 47, 36, 0.15);
+  outline: none;
+  border-radius: 18px;
+  background: rgba(255,255,255,.92);
+  color: var(--text);
+  padding: 15px 16px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
+}
+textarea { min-height: 285px; resize: vertical; line-height: 1.5; }
+select { cursor: pointer; }
+input:focus, textarea:focus { border-color: rgba(138,63,63,.58); box-shadow: 0 0 0 4px rgba(138,63,63,.10); }
+.options-row { margin: -2px 0 8px; }
+.check-line { display: flex; gap: 9px; align-items: center; color: var(--muted); font-weight: 700; }
+.check-line input { width: 18px; height: 18px; accent-color: var(--primary); }
+.button-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.button-row.compact { margin-top: 0; justify-content: flex-end; }
+.button-row.center { justify-content: center; }
+.format-card { background: linear-gradient(145deg, rgba(255,255,255,.74), rgba(242,229,216,.78)); }
+.format-card p { color: var(--muted); line-height: 1.55; }
+.format-line { margin-top: 16px; padding: 13px 14px; border-radius: 16px; background: var(--panel-solid); color: var(--primary-dark); font-weight: 700; }
+.mini-example { margin-top: 14px; padding: 14px; border-radius: 18px; color: #5d514a; background: rgba(255,255,255,.64); line-height: 1.45; font-size: 14px; }
+.file-box { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+.file-box label { display: block; margin-bottom: 10px; font-weight: 900; }
+.file-box input { width: 100%; }
+
+.study-controls { display: grid; gap: 12px; margin: 6px 0 18px; }
+.control-group { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.control-group > span { color: var(--muted); font-size: 13px; font-weight: 950; text-transform: uppercase; letter-spacing: .08em; margin-right: 2px; }
+.mode, .filter { min-height: 38px; padding: 9px 13px; background: rgba(255,255,255,.66); }
+.mode.active, .filter.active { color: #fff; background: var(--primary-dark); border-color: transparent; }
+
+.progress-wrap { margin: 8px 0 22px; }
+.progress-line { height: 12px; border-radius: 999px; overflow: hidden; background: rgba(37,29,26,.10); }
+.progress-line span { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width .22s ease; }
+.stats { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-top: 10px; color: var(--muted); font-weight: 800; }
+
+.trainer { display: grid; gap: 18px; }
+.flash-card {
+  max-width: 860px;
+  width: 100%;
+  min-height: 430px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  border-radius: 34px;
+  border: 1px solid rgba(67, 47, 36, 0.13);
+  overflow: hidden;
+  background: var(--panel-solid);
+  box-shadow: 0 28px 70px rgba(59,40,26,.15);
+  cursor: pointer;
+}
+.card-front-panel, .answer-panel { padding: 34px; }
+.card-front-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background:
+    radial-gradient(circle at top left, rgba(215,159,82,.26), transparent 18rem),
+    linear-gradient(145deg, #fffaf4, #f0e2d4);
+}
+.badge { display: inline-flex; width: fit-content; border-radius: 999px; padding: 8px 12px; background: rgba(138,63,63,.10); color: var(--primary-dark); font-weight: 950; font-size: 13px; }
+#cardFront { margin: 18px 0 14px; font-size: clamp(42px, 7vw, 78px); line-height: .95; letter-spacing: -.06em; }
+.front-hint { margin: 0; color: #5a4b43; font-size: 17px; line-height: 1.48; }
+.front-extra { margin-top: 18px; color: var(--primary-dark); font-weight: 800; }
+.answer-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  background: rgba(255,255,255,.70);
+}
+.answer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.answer-box {
+  min-height: 92px;
+  padding: 15px;
+  border-radius: 20px;
+  background: rgba(248,224,187,.30);
+  border: 1px solid var(--line);
+}
+.answer-box.wide { grid-column: 1 / -1; }
+.answer-box span { display: block; margin-bottom: 8px; color: var(--muted); font-weight: 950; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+.answer-box strong { font-size: 18px; line-height: 1.45; font-weight: 800; }
+.example-box strong { font-weight: 750; }
+
+.typing {
+  max-width: 780px;
+  margin: 0 auto;
+  width: 100%;
+  border-radius: 26px;
+  border: 1px solid var(--line);
+  padding: 20px;
+  background: rgba(255,255,255,.62);
+}
+.typing label { display: block; margin-bottom: 10px; font-weight: 900; }
+.typing-row { display: flex; gap: 10px; }
+.typing-row input { flex: 1; margin: 0; }
+.result { margin: 12px 0 0; font-weight: 900; }
+.result.ok { color: var(--success); }
+.result.no { color: var(--danger); }
+.card-actions { margin-top: 4px; }
+
+.deck-list { display: grid; gap: 12px; }
+.deck-item {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(255,255,255,.64);
+}
+.deck-icon { width: 48px; height: 48px; border-radius: 16px; display: grid; place-items: center; background: var(--accent-soft); color: var(--primary-dark); font-weight: 950; }
+.deck-main h3 { margin-bottom: 5px; }
+.deck-main p { margin: 0; color: var(--muted); }
+.empty-state { margin: 0; padding: 18px; border: 1px dashed rgba(67,47,36,.22); border-radius: 18px; color: var(--muted); background: rgba(255,255,255,.42); }
+.toast { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 10; max-width: min(520px, calc(100% - 32px)); padding: 13px 17px; border-radius: 999px; color: #fff; background: rgba(37,29,26,.92); box-shadow: var(--shadow-soft); font-weight: 850; }
+.hidden { display: none !important; }
+
+@media (max-width: 900px) {
+  .hero-grid, .import-grid { grid-template-columns: 1fr; }
+  .method-card { min-height: auto; }
+  .flash-card { grid-template-columns: 1fr; }
+  .answer-panel { border-top: 1px solid var(--line); }
+}
+
+@media (max-width: 680px) {
+  .app-shell { width: min(100% - 18px, 1200px); padding-top: 10px; }
+  .hero, .panel { border-radius: 24px; padding: 18px; }
+  .topbar { margin-bottom: 28px; }
+  h1 { font-size: clamp(36px, 12vw, 52px); }
+  .section-head, .study-header { flex-direction: column; }
+  .button-row.compact { justify-content: flex-start; }
+  .card-front-panel, .answer-panel { padding: 24px; }
+  .answer-grid { grid-template-columns: 1fr; }
+  .typing-row { flex-direction: column; }
+  .deck-item { grid-template-columns: 42px 1fr; }
+  .deck-item button { grid-column: 1 / -1; width: 100%; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; }
+}
+
+  </style>
+</head>
+<body>
+  <div class="page-bg"></div>
+  <div class="app-shell">
+    <header class="hero">
+      <nav class="topbar" aria-label="Главная навигация">
+        <div class="brand-mark">C1</div>
+        <div class="brand-copy">
+          <strong>Vocabulary Studio</strong>
+          <span>English & German cards</span>
+        </div>
+        <a class="ghost-link" href="#savedDecksPanel">Мои колоды</a>
+      </nav>
+
+      <section class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">для английского и немецкого B2–C1</p>
+          <h1>Загружаете список — сайт сам делает умные карточки.</h1>
+          <p class="lead">Не просто «слово-перевод», а карточка для активного вспоминания: артикль для немецкого, синонимы, устойчивые сочетания, заметка по смыслу, пример и cloze-тренировка.</p>
+          <div class="hero-actions">
+            <a class="primary-link" href="#importPanel">Создать колоду</a>
+            <button class="soft" id="demoOpenBtn" type="button">Посмотреть пример</button>
+          </div>
+        </div>
+
+        <aside class="method-card" aria-label="Методика обучения">
+          <span class="mini-label">Методика карточки</span>
+          <ol>
+            <li>Вижу слово.</li>
+            <li>Для немецкого вспоминаю артикль.</li>
+            <li>Вспоминаю 2–3 синонима.</li>
+            <li>Называю 1–2 collocations.</li>
+            <li>Вставляю слово в пример.</li>
+          </ol>
+        </aside>
+      </section>
+    </header>
+
+    <main>
+      <section class="panel import-panel" id="importPanel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">шаг 1</p>
+            <h2>Создать колоду</h2>
+          </div>
+          <span class="pill">всё сохраняется в браузере</span>
+        </div>
+
+        <div class="import-grid">
+          <div class="creator-card">
+            <label class="field-label" for="languageSelect">Язык колоды</label>
+            <select id="languageSelect">
+              <option value="en" selected>English — синонимы, collocations, пример</option>
+              <option value="de">Deutsch — артикль, синонимы, Kollokationen, Beispiel</option>
+            </select>
+
+            <label class="field-label" for="deckName">Название колоды</label>
+            <input id="deckName" type="text" placeholder="Например: C1 Academic Vocabulary — June" />
+
+            <label class="field-label" for="wordText">Список слов</label>
+            <textarea id="wordText" spellcheck="false" placeholder="English: mitigate | reduce, alleviate, soften | mitigate risk; mitigate the impact | смягчать | The new policy may mitigate the impact of rising costs.&#10;Deutsch: die | Entwicklung | Fortschritt, Entfaltung | die wirtschaftliche Entwicklung; eine rasante Entwicklung | развитие | Die wirtschaftliche Entwicklung hat sich deutlich beschleunigt."></textarea>
+
+            <div class="options-row">
+              <label class="check-line">
+                <input id="autoExampleToggle" type="checkbox" checked />
+                <span>Если примера нет — создать пример автоматически</span>
+              </label>
+            </div>
+
+            <div class="button-row">
+              <button class="primary" id="createDeckBtn" type="button">Создать карточки</button>
+              <button id="loadSampleBtn" type="button">Вставить пример</button>
+              <button id="clearInputBtn" type="button">Очистить</button>
+            </div>
+          </div>
+
+          <aside class="format-card">
+            <h3>Рекомендуемый формат</h3>
+            <div class="format-line"><b>English:</b> word | synonyms | collocations | note | example</div>
+            <div class="format-line"><b>Deutsch:</b> article | word | synonyms | collocations | note | example</div>
+            <p>Разделитель между блоками — вертикальная черта <b>|</b>. Для немецкого первый блок — артикль: <b>der / die / das</b>. Последние поля можно не заполнять.</p>
+            <div class="mini-example">
+              <span>EN: scrutinise | examine, inspect, analyse | scrutinise evidence; scrutinise a proposal | внимательно изучать | Investors will scrutinise the figures before approving the deal.</span><br><br>
+              <span>DE: die | Entwicklung | Fortschritt, Entfaltung | wirtschaftliche Entwicklung; rasante Entwicklung | развитие | Die wirtschaftliche Entwicklung hat sich deutlich beschleunigt.</span>
+            </div>
+            <div class="file-box">
+              <label for="fileInput">Загрузить .txt / .csv</label>
+              <input id="fileInput" type="file" accept=".csv,.txt,.tsv,text/plain,text/csv" />
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="panel hidden" id="studyPanel">
+        <div class="study-header">
+          <div>
+            <p class="eyebrow">шаг 2</p>
+            <h2 id="activeDeckTitle">Колода</h2>
+            <p id="deckMeta" class="muted"></p>
+          </div>
+          <div class="button-row compact">
+            <button id="shuffleBtn" type="button">Перемешать</button>
+            <button id="exportBtn" type="button">Экспорт</button>
+            <button class="danger" id="deleteDeckBtn" type="button">Удалить</button>
+          </div>
+        </div>
+
+        <div class="study-controls" aria-label="Настройки тренировки">
+          <div class="control-group">
+            <span>Режим</span>
+            <button class="mode active" data-mode="deep" type="button">Deep card</button>
+            <button class="mode" data-mode="article" type="button">Артикль</button>
+            <button class="mode" data-mode="synonyms" type="button">Синонимы</button>
+            <button class="mode" data-mode="collocations" type="button">Collocations</button>
+            <button class="mode" data-mode="cloze" type="button">Cloze</button>
+            <button class="mode" data-mode="type" type="button">Письменно</button>
+          </div>
+          <div class="control-group">
+            <span>Сессия</span>
+            <button class="filter active" data-filter="all" type="button">Все</button>
+            <button class="filter" data-filter="repeat" type="button">Повторить</button>
+            <button class="filter" data-filter="new" type="button">Новые</button>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-line"><span id="progressBar"></span></div>
+          <div class="stats">
+            <span id="cardCounter">0 / 0</span>
+            <span id="knownCounter">Знаю: 0</span>
+            <span id="repeatCounter">Повторить: 0</span>
+            <span id="newCounter">Новые: 0</span>
+          </div>
+        </div>
+
+        <section class="trainer" aria-live="polite">
+          <article class="flash-card" id="flashCard" tabindex="0" role="button" aria-label="Нажмите, чтобы открыть ответ">
+            <div class="card-front-panel">
+              <span id="frontBadge" class="badge">Deep card</span>
+              <h3 id="cardFront">—</h3>
+              <p id="frontHint" class="front-hint">Сначала вспомните синонимы, collocations и пример. Потом откройте карточку.</p>
+              <div id="frontExtra" class="front-extra"></div>
+            </div>
+            <div class="answer-panel hidden" id="answerPanel">
+              <div class="answer-grid">
+                <div class="answer-box" id="articleBox">
+                  <span>Артикль</span>
+                  <strong id="cardArticle">—</strong>
+                </div>
+                <div class="answer-box">
+                  <span>Синонимы</span>
+                  <strong id="cardSynonyms">—</strong>
+                </div>
+                <div class="answer-box">
+                  <span>Collocations</span>
+                  <strong id="cardCollocations">—</strong>
+                </div>
+                <div class="answer-box wide">
+                  <span>Заметка / смысл</span>
+                  <strong id="cardNote">—</strong>
+                </div>
+                <div class="answer-box wide example-box">
+                  <span>Пример</span>
+                  <strong id="cardExample">—</strong>
+                </div>
+              </div>
+              <button class="tiny" id="anotherExampleBtn" type="button">Другой пример</button>
+            </div>
+          </article>
+
+          <div class="typing hidden" id="typingBox">
+            <label for="answerInput">Введите слово по подсказке</label>
+            <div class="typing-row">
+              <input id="answerInput" type="text" placeholder="Ваш ответ" autocomplete="off" />
+              <button id="checkAnswerBtn" type="button">Проверить</button>
+            </div>
+            <p id="answerResult" class="result"></p>
+          </div>
+
+          <div class="button-row center card-actions">
+            <button id="prevBtn" type="button">← Назад</button>
+            <button id="speakBtn" type="button">Произнести</button>
+            <button class="success" id="knownBtn" type="button">Знаю</button>
+            <button class="warning" id="repeatBtn" type="button">Повторить</button>
+            <button id="nextBtn" type="button">Вперёд →</button>
+          </div>
+        </section>
+      </section>
+
+      <section class="panel" id="savedDecksPanel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">шаг 3</p>
+            <h2>Сохранённые колоды</h2>
+            <p class="muted">Колоды лежат в памяти этого браузера. Можно закрыть сайт и продолжить позже.</p>
+          </div>
+        </div>
+        <div id="deckList" class="deck-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+
+  <template id="deckItemTemplate">
+    <article class="deck-item">
+      <div class="deck-icon">A</div>
+      <div class="deck-main">
+        <h3></h3>
+        <p></p>
+      </div>
+      <button type="button">Открыть</button>
+    </article>
+  </template>
+
+  <script>
+const STORAGE_KEY = 'vocabularyStudio.dualLanguage.decks.v1';
+
+const languageConfig = {
+  en: {
+    name: 'English',
+    level: 'B2–C1',
+    speech: 'en-GB',
+    deckPrefix: 'English Vocabulary',
+    formatHint: 'word | synonyms | collocations | note | example',
+    deepHint: 'Вспомните 2–3 synonyms, 1–2 collocations, смысл и пример. Потом откройте карточку.',
+    typeHint: 'Введите английское слово. Синоним тоже засчитывается.',
+  },
+  de: {
+    name: 'Deutsch',
+    level: 'B2–C1',
+    speech: 'de-DE',
+    deckPrefix: 'Deutsch Wortschatz',
+    formatHint: 'article | word | synonyms | collocations | note | example',
+    deepHint: 'Сначала вспомните артикль, затем 2–3 синонима, 1–2 Kollokationen и пример.',
+    typeHint: 'Введите немецкое слово. Вариант с артиклем тоже засчитывается.',
+  },
+};
+
+const state = {
+  decks: loadDecks(),
+  activeDeckId: null,
+  currentIndex: 0,
+  mode: 'deep',
+  filter: 'all',
+  revealed: false,
+};
+
+const $ = (id) => document.getElementById(id);
+
+const els = {
+  demoOpenBtn: $('demoOpenBtn'),
+  languageSelect: $('languageSelect'),
+  deckName: $('deckName'),
+  wordText: $('wordText'),
+  autoExampleToggle: $('autoExampleToggle'),
+  fileInput: $('fileInput'),
+  createDeckBtn: $('createDeckBtn'),
+  loadSampleBtn: $('loadSampleBtn'),
+  clearInputBtn: $('clearInputBtn'),
+  studyPanel: $('studyPanel'),
+  activeDeckTitle: $('activeDeckTitle'),
+  deckMeta: $('deckMeta'),
+  flashCard: $('flashCard'),
+  answerPanel: $('answerPanel'),
+  frontBadge: $('frontBadge'),
+  cardFront: $('cardFront'),
+  frontHint: $('frontHint'),
+  frontExtra: $('frontExtra'),
+  articleBox: $('articleBox'),
+  cardArticle: $('cardArticle'),
+  cardSynonyms: $('cardSynonyms'),
+  cardCollocations: $('cardCollocations'),
+  cardNote: $('cardNote'),
+  cardExample: $('cardExample'),
+  anotherExampleBtn: $('anotherExampleBtn'),
+  cardCounter: $('cardCounter'),
+  knownCounter: $('knownCounter'),
+  repeatCounter: $('repeatCounter'),
+  newCounter: $('newCounter'),
+  progressBar: $('progressBar'),
+  knownBtn: $('knownBtn'),
+  repeatBtn: $('repeatBtn'),
+  nextBtn: $('nextBtn'),
+  prevBtn: $('prevBtn'),
+  shuffleBtn: $('shuffleBtn'),
+  deleteDeckBtn: $('deleteDeckBtn'),
+  exportBtn: $('exportBtn'),
+  speakBtn: $('speakBtn'),
+  deckList: $('deckList'),
+  deckItemTemplate: $('deckItemTemplate'),
+  typingBox: $('typingBox'),
+  answerInput: $('answerInput'),
+  checkAnswerBtn: $('checkAnswerBtn'),
+  answerResult: $('answerResult'),
+  toast: $('toast'),
+};
+
+const samples = {
+  en: `mitigate | reduce, alleviate, soften | mitigate risk; mitigate the impact | смягчать, уменьшать негативный эффект | The new policy may mitigate the impact of rising costs.
+scrutinise | examine, inspect, analyse | scrutinise evidence; scrutinise a proposal | внимательно изучать, проверять детали | Investors will scrutinise the figures before approving the deal.
+subtle | nuanced, delicate, understated | subtle difference; subtle hint | тонкий, едва заметный, неочевидный | There is a subtle difference between confidence and arrogance.
+compelling | convincing, persuasive, powerful | compelling argument; compelling evidence | убедительный, захватывающий | The speaker made a compelling argument for reform.
+undermine | weaken, damage, erode | undermine trust; undermine confidence | подрывать, ослаблять | Constant criticism can undermine a person's confidence.`,
+  de: `die | Entwicklung | Fortschritt, Entfaltung | wirtschaftliche Entwicklung; rasante Entwicklung | развитие | Die wirtschaftliche Entwicklung hat sich deutlich beschleunigt.
+der | Einfluss | Auswirkung, Wirkung | großen Einfluss haben; Einfluss auf etwas nehmen | влияние | Soziale Medien haben einen großen Einfluss auf die öffentliche Meinung.
+das | Verhalten | Benehmen, Handlungsweise | menschliches Verhalten; Verhalten ändern | поведение | Das menschliche Verhalten verändert sich unter Stress.
+die | Herausforderung | Aufgabe, Schwierigkeit | eine große Herausforderung; vor einer Herausforderung stehen | вызов, сложная задача | Die Digitalisierung ist für viele Unternehmen eine große Herausforderung.
+der | Zusammenhang | Verbindung, Kontext | im Zusammenhang mit; ein enger Zusammenhang | связь, контекст | Es gibt einen engen Zusammenhang zwischen Schlaf und Konzentration.
+das | Ergebnis | Resultat, Folge | ein positives Ergebnis; zu einem Ergebnis kommen | результат | Das Ergebnis der Studie war überraschend eindeutig.`,
+};
+
+const modeLabels = {
+  deep: 'Deep card',
+  article: 'Артикль',
+  synonyms: 'Синонимы',
+  collocations: 'Collocations',
+  cloze: 'Cloze',
+  type: 'Письменно',
+};
+
+function loadDecks() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveDecks() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.decks));
+}
+
+function id() {
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function toast(message) {
+  els.toast.textContent = message;
+  els.toast.classList.remove('hidden');
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => els.toast.classList.add('hidden'), 2600);
+}
+
+function normalizeText(value) {
+  return String(value || '').replace(/^\uFEFF/, '').trim();
+}
+
+function hasCyrillic(value) {
+  return /[а-яё]/i.test(value || '');
+}
+
+function splitField(value, separator = /[,/]+/) {
+  return String(value || '')
+    .split(separator)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function normaliseGermanArticle(value) {
+  const clean = String(value || '').trim().toLowerCase().replace(/[.:]/g, '');
+  const aliases = {
+    der: 'der',
+    die: 'die',
+    das: 'das',
+    plural: 'die Pl.',
+    pl: 'die Pl.',
+    'die pl': 'die Pl.',
+    'die pl.': 'die Pl.',
+  };
+  return aliases[clean] || '';
+}
+
+function extractGermanHeadword(value) {
+  const clean = String(value || '').trim();
+  const match = clean.match(/^(der|die|das)\s+(.+)$/i);
+  if (!match) return { article: '', word: clean };
+  return { article: normaliseGermanArticle(match[1]), word: match[2].trim() };
+}
+
+function splitLine(line, language) {
+  const clean = line.trim();
+  if (!clean || clean.startsWith('#')) return null;
+
+  let parts = [];
+  let parserType = 'pipe';
+
+  if (clean.includes('|')) {
+    parts = clean.split('|').map((item) => item.trim());
+  } else if (clean.includes('\t')) {
+    parts = clean.split('\t').map((item) => item.trim());
+  } else if (clean.includes('—')) {
+    parserType = 'legacy';
+    parts = clean.split('—').map((item) => item.trim());
+  } else if (clean.includes(' - ')) {
+    parserType = 'legacy';
+    parts = clean.split(' - ').map((item) => item.trim());
+  } else if (clean.includes(';')) {
+    parts = clean.split(';').map((item) => item.trim());
+  } else {
+    parts = [clean];
+  }
+
+  parts = parts.filter(Boolean);
+  if (!parts.length) return null;
+
+  let article = '';
+  let word = '';
+  let synonyms = [];
+  let collocations = [];
+  let note = '';
+  let example = '';
+
+  if (language === 'de') {
+    if (parserType === 'legacy') {
+      const head = extractGermanHeadword(parts[0]);
+      article = head.article;
+      word = head.word;
+      note = parts[1] || '';
+      synonyms = splitField(parts[2] || '');
+      example = parts[3] || '';
+    } else {
+      const firstAsArticle = normaliseGermanArticle(parts[0]);
+      if (firstAsArticle && parts[1]) {
+        article = firstAsArticle;
+        word = parts[1] || '';
+        synonyms = splitField(parts[2] || '');
+        collocations = splitField(parts[3] || '', /[;]+/);
+        note = parts[4] || '';
+        example = parts[5] || '';
+      } else {
+        const head = extractGermanHeadword(parts[0]);
+        article = head.article;
+        word = head.word;
+        synonyms = splitField(parts[1] || '');
+        collocations = splitField(parts[2] || '', /[;]+/);
+        note = parts[3] || '';
+        example = parts[4] || '';
+      }
+    }
+  } else {
+    word = parts[0] || '';
+    if (parserType === 'legacy') {
+      note = parts[1] || '';
+      synonyms = splitField(parts[2] || '');
+      example = parts[3] || '';
+    } else {
+      synonyms = splitField(parts[1] || '');
+      collocations = splitField(parts[2] || '', /[;]+/);
+      note = parts[3] || '';
+      example = parts[4] || '';
+
+      if (hasCyrillic(parts[1]) && parts[2] && !parts[3]) {
+        note = parts[1];
+        synonyms = splitField(parts[2] || '');
+        collocations = [];
+      }
+    }
+  }
+
+  word = word.trim();
+  if (!word) return null;
+
+  return {
+    id: id(),
+    language,
+    article,
+    word,
+    synonyms,
+    collocations,
+    note,
+    example,
+    generatedExamples: [],
+    activeGeneratedExample: '',
+    status: 'new',
+    correctAnswers: 0,
+    wrongAnswers: 0,
+    createdAt: new Date().toISOString(),
+  };
+}
+
+function parseWords(rawText, shouldGenerateExamples, language) {
+  const text = normalizeText(rawText);
+  if (!text) return [];
+
+  const cards = text
+    .split(/\r?\n/)
+    .map((line) => splitLine(line, language))
+    .filter(Boolean);
+
+  if (shouldGenerateExamples) {
+    cards.forEach((card) => {
+      if (!card.example) card.example = generateExample(card);
+    });
+  }
+
+  return cards;
+}
+
+function guessPartOfSpeech(word) {
+  const w = word.toLowerCase().trim();
+  if (/ly$/.test(w)) return 'adverb';
+  if (/(ate|ise|ize|fy|en)$/.test(w)) return 'verb';
+  if (/(ive|ous|ful|less|able|ible|al|ic|ent|ant|ary|ory)$/.test(w)) return 'adjective';
+  if (/^(to\s+)/.test(w)) return 'verb';
+  return 'neutral';
+}
+
+function choose(items) {
+  return items[Math.floor(Math.random() * items.length)];
+}
+
+function articleForEnglish(word) {
+  return /^[aeiou]/i.test(word) ? 'an' : 'a';
+}
+
+function fullWord(card) {
+  return card.language === 'de' && card.article ? `${card.article} ${card.word}` : card.word;
+}
+
+function generateEnglishExample(card) {
+  const word = card.word.trim();
+  const pos = guessPartOfSpeech(word);
+  const collocation = card.collocations[0];
+
+  if (collocation && collocation.toLowerCase().includes(word.toLowerCase())) {
+    return choose([
+      `In a formal discussion, the phrase “${collocation}” can make your point sound more precise.`,
+      `The report uses “${collocation}” to describe the situation more accurately.`,
+      `During the meeting, she referred to “${collocation}” as the main issue.`
+    ]);
+  }
+
+  const templates = {
+    verb: [
+      `The committee decided to ${word} the proposal before making a final decision.`,
+      `A more careful strategy could help us ${word} the problem without unnecessary conflict.`,
+      `The report aims to ${word} the main factors behind the decision.`
+    ],
+    adjective: [
+      `Her ${word} explanation made a complicated idea much easier to understand.`,
+      `The article takes a ${word} approach to a controversial issue.`,
+      `It was a ${word} response to a problem that many people had underestimated.`
+    ],
+    adverb: [
+      `She explained the issue ${word}, without adding unnecessary detail.`,
+      `The speaker answered ${word}, but the meaning was still clear.`,
+      `The argument was presented ${word} in the final paragraph.`
+    ],
+    neutral: [
+      `The discussion revealed ${articleForEnglish(word)} ${word} that had not been obvious at first.`,
+      `This example shows how ${word} can change the tone of a sentence.`,
+      `The article uses ${word} to make the argument sound more precise.`
+    ],
+  };
+
+  return choose(templates[pos] || templates.neutral);
+}
+
+function generateGermanExample(card) {
+  const word = fullWord(card);
+  const collocation = card.collocations[0];
+
+  if (collocation) {
+    return choose([
+      `In einem formellen Text kann die Formulierung „${collocation}“ sehr natürlich klingen.`,
+      `Die Formulierung „${collocation}“ passt gut zu einer C1-Antwort.`,
+      `Im mündlichen Teil kann man „${collocation}“ verwenden, um präziser zu argumentieren.`
+    ]);
+  }
+
+  return choose([
+    `Im Prüfungsteil Schreiben kann man „${word}“ verwenden, um den Gedanken präziser auszudrücken.`,
+    `Das Wort „${word}“ hilft, eine Aussage differenzierter zu formulieren.`,
+    `In einer Diskussion über Gesellschaft oder Bildung wäre „${word}“ ein passendes Wort.`,
+  ]);
+}
+
+function generateExample(card) {
+  return card.language === 'de' ? generateGermanExample(card) : generateEnglishExample(card);
+}
+
+function createDeck() {
+  const language = els.languageSelect.value || 'en';
+  const cards = parseWords(els.wordText.value, els.autoExampleToggle.checked, language);
+  if (!cards.length) {
+    const hint = languageConfig[language].formatHint;
+    toast(`Не получилось распознать список. Формат: ${hint}`);
+    return;
+  }
+
+  const deck = {
+    id: id(),
+    language,
+    name: els.deckName.value.trim() || `${languageConfig[language].deckPrefix} — ${new Date().toLocaleDateString('ru-RU')}`,
+    createdAt: new Date().toISOString(),
+    cards,
+  };
+
+  state.decks.unshift(deck);
+  saveDecks();
+  renderDeckList();
+  openDeck(deck.id);
+  toast(`Готово: создано ${cards.length} карточек`);
+}
+
+function getActiveDeck() {
+  return state.decks.find((deck) => deck.id === state.activeDeckId);
+}
+
+function getSessionCards() {
+  const deck = getActiveDeck();
+  if (!deck) return [];
+  if (state.filter === 'repeat') return deck.cards.filter((card) => card.status === 'repeat');
+  if (state.filter === 'new') return deck.cards.filter((card) => card.status !== 'known');
+  return deck.cards;
+}
+
+function getCurrentCard() {
+  const cards = getSessionCards();
+  if (!cards.length) return null;
+  if (state.currentIndex >= cards.length) state.currentIndex = Math.max(0, cards.length - 1);
+  return cards[state.currentIndex];
+}
+
+function openDeck(deckId) {
+  state.activeDeckId = deckId;
+  state.currentIndex = 0;
+  state.filter = 'all';
+  state.revealed = false;
+  setActiveButtons('.filter', 'all');
+  els.studyPanel.classList.remove('hidden');
+  renderCard();
+  window.scrollTo({ top: els.studyPanel.offsetTop - 14, behavior: 'smooth' });
+}
+
+function setActiveButtons(selector, value) {
+  document.querySelectorAll(selector).forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.mode === value || btn.dataset.filter === value);
+  });
+}
+
+function setMode(mode) {
+  state.mode = mode;
+  state.revealed = false;
+  setActiveButtons('.mode', mode);
+  els.typingBox.classList.toggle('hidden', mode !== 'type');
+  els.flashCard.classList.toggle('hidden', mode === 'type');
+  els.answerResult.textContent = '';
+  els.answerInput.value = '';
+  renderCard();
+}
+
+function setFilter(filter) {
+  state.filter = filter;
+  state.currentIndex = 0;
+  state.revealed = false;
+  setActiveButtons('.filter', filter);
+  renderCard();
+}
+
+function getCloze(example, word) {
+  if (!example) return 'Пример пока не указан.';
+  const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`\\b${escaped}\\b`, 'gi');
+  const cloze = example.replace(regex, '_____');
+  return cloze === example ? `${example}\n\nСлово: _____` : cloze;
+}
+
+function getFrontData(card) {
+  const deck = getActiveDeck();
+  const lang = deck?.language || card.language || 'en';
+  const config = languageConfig[lang] || languageConfig.en;
+  const note = card.note || 'Вспомните смысл по синонимам и примеру.';
+  const firstSynonym = card.synonyms[0] ? `Подсказка: ${card.synonyms[0]}` : '';
+
+  if (state.mode === 'article') {
+    return {
+      badge: 'Артикль',
+      front: card.word,
+      hint: lang === 'de' ? 'Вспомните der / die / das. Потом откройте ответ.' : 'Для English артикль обычно не нужен. Переключитесь на Deep card или Synonyms.',
+      extra: lang === 'de' ? 'Подсказка: проговорите слово вместе с артиклем.' : '',
+    };
+  }
+
+  if (state.mode === 'synonyms') {
+    return {
+      badge: 'Синонимы',
+      front: lang === 'de' ? card.word : card.word,
+      hint: 'Назовите 2–3 близких слова. Потом откройте ответ.',
+      extra: lang === 'de' && card.article ? 'Артикль тоже вспомните, но не открывайте раньше времени.' : '',
+    };
+  }
+
+  if (state.mode === 'collocations') {
+    return {
+      badge: 'Collocations',
+      front: card.word,
+      hint: lang === 'de' ? 'Вспомните 1–2 устойчивых сочетания / Kollokationen.' : 'Вспомните устойчивые сочетания с этим словом.',
+      extra: firstSynonym,
+    };
+  }
+
+  if (state.mode === 'cloze') {
+    return {
+      badge: 'Cloze',
+      front: getCloze(card.example, card.word),
+      hint: 'Вставьте пропущенное слово. Затем откройте ответ.',
+      extra: firstSynonym,
+    };
+  }
+
+  if (state.mode === 'type') {
+    return {
+      badge: 'Письменно',
+      front: note,
+      hint: config.typeHint,
+      extra: firstSynonym,
+    };
+  }
+
+  return {
+    badge: 'Deep card',
+    front: card.word,
+    hint: config.deepHint,
+    extra: lang === 'de' ? 'Проверьте себя: артикль → синонимы → Kollokationen → Beispiel.' : '',
+  };
+}
+
+function renderCard() {
+  const deck = getActiveDeck();
+  const sessionCards = getSessionCards();
+  const card = getCurrentCard();
+
+  if (!deck) return;
+
+  const known = deck.cards.filter((item) => item.status === 'known').length;
+  const repeat = deck.cards.filter((item) => item.status === 'repeat').length;
+  const fresh = deck.cards.filter((item) => item.status !== 'known').length;
+  const progress = deck.cards.length ? Math.round((known / deck.cards.length) * 100) : 0;
+  const langName = languageConfig[deck.language || 'en']?.name || 'English';
+
+  els.activeDeckTitle.textContent = deck.name;
+  els.deckMeta.textContent = `${langName} · ${deck.cards.length} карточек · создано ${new Date(deck.createdAt).toLocaleDateString('ru-RU')}`;
+  els.knownCounter.textContent = `Знаю: ${known}`;
+  els.repeatCounter.textContent = `Повторить: ${repeat}`;
+  els.newCounter.textContent = `Новые: ${fresh}`;
+  els.progressBar.style.width = `${progress}%`;
+
+  if (!sessionCards.length) {
+    els.cardCounter.textContent = `0 / 0`;
+    els.frontBadge.textContent = 'Пусто';
+    els.cardFront.textContent = state.filter === 'repeat'
+      ? 'Сейчас нет карточек на повторение'
+      : 'В этой сессии нет карточек';
+    els.frontHint.textContent = 'Переключите сессию на «Все» или добавьте новые слова.';
+    els.frontExtra.textContent = '';
+    els.answerPanel.classList.add('hidden');
+    els.typingBox.classList.add('hidden');
+    return;
+  }
+
+  const front = getFrontData(card);
+  els.frontBadge.textContent = front.badge;
+  els.cardFront.textContent = front.front;
+  els.frontHint.textContent = front.hint;
+  els.frontExtra.textContent = front.extra || '';
+  els.cardCounter.textContent = `${state.currentIndex + 1} / ${sessionCards.length}`;
+  els.cardArticle.textContent = card.article || '—';
+  els.articleBox.classList.toggle('hidden', !(deck.language === 'de' || card.article));
+  els.cardSynonyms.textContent = card.synonyms.length ? card.synonyms.join(', ') : 'Не указаны';
+  els.cardCollocations.textContent = card.collocations.length ? card.collocations.join('; ') : 'Не указаны';
+  els.cardNote.textContent = card.note || 'Заметка не указана';
+  els.cardExample.textContent = card.activeGeneratedExample || card.example || generateExample(card);
+  els.answerPanel.classList.toggle('hidden', !state.revealed || state.mode === 'type');
+
+  if (state.mode === 'type') {
+    els.typingBox.classList.remove('hidden');
+    els.flashCard.classList.add('hidden');
+    els.answerInput.placeholder = deck.language === 'de' ? 'Введите Wort или Artikel + Wort' : 'Введите word или один из synonyms';
+    els.answerResult.textContent = '';
+  } else {
+    els.typingBox.classList.add('hidden');
+    els.flashCard.classList.remove('hidden');
+  }
+}
+
+function revealCard() {
+  if (state.mode === 'type') return;
+  state.revealed = !state.revealed;
+  renderCard();
+}
+
+function moveCard(step) {
+  const cards = getSessionCards();
+  if (!cards.length) return;
+  state.currentIndex = (state.currentIndex + step + cards.length) % cards.length;
+  state.revealed = false;
+  els.answerResult.textContent = '';
+  els.answerInput.value = '';
+  renderCard();
+}
+
+function markCard(status) {
+  const card = getCurrentCard();
+  if (!card) return;
+  card.status = status;
+  if (status === 'known') card.correctAnswers += 1;
+  if (status === 'repeat') card.wrongAnswers += 1;
+  saveDecks();
+  renderDeckList();
+  const cards = getSessionCards();
+  if (!cards.length) state.currentIndex = 0;
+  else if (state.currentIndex >= cards.length) state.currentIndex = 0;
+  else moveCard(1);
+  renderCard();
+}
+
+function shuffleActiveDeck() {
+  const deck = getActiveDeck();
+  if (!deck) return;
+  for (let i = deck.cards.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck.cards[i], deck.cards[j]] = [deck.cards[j], deck.cards[i]];
+  }
+  state.currentIndex = 0;
+  state.revealed = false;
+  saveDecks();
+  renderCard();
+  toast('Колода перемешана');
+}
+
+function deleteActiveDeck() {
+  const deck = getActiveDeck();
+  if (!deck) return;
+  if (!confirm(`Удалить колоду «${deck.name}»?`)) return;
+  state.decks = state.decks.filter((item) => item.id !== deck.id);
+  state.activeDeckId = null;
+  saveDecks();
+  renderDeckList();
+  els.studyPanel.classList.add('hidden');
+  toast('Колода удалена');
+}
+
+function exportActiveDeck() {
+  const deck = getActiveDeck();
+  if (!deck) return;
+  const blob = new Blob([JSON.stringify(deck, null, 2)], { type: 'application/json;charset=utf-8' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `${deck.name.replace(/[^a-zа-яё0-9]+/gi, '_')}.json`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+function speakCurrentWord() {
+  const deck = getActiveDeck();
+  const card = getCurrentCard();
+  if (!card || !('speechSynthesis' in window)) return;
+  const lang = deck?.language || card.language || 'en';
+  const utterance = new SpeechSynthesisUtterance(fullWord(card));
+  utterance.lang = languageConfig[lang]?.speech || 'en-GB';
+  utterance.rate = lang === 'de' ? 0.78 : 0.82;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
+}
+
+function normalizeAnswer(value) {
+  return String(value || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[.,!?;:'"“”‘’]/g, '')
+    .replace(/\s+/g, ' ');
+}
+
+function checkAnswer() {
+  const card = getCurrentCard();
+  if (!card) return;
+  const answer = normalizeAnswer(els.answerInput.value);
+  const correctAnswers = [card.word, fullWord(card), ...card.synonyms]
+    .map(normalizeAnswer)
+    .filter(Boolean);
+  const isCorrect = correctAnswers.includes(answer);
+
+  els.answerResult.className = `result ${isCorrect ? 'ok' : 'no'}`;
+  els.answerResult.textContent = isCorrect
+    ? `Верно. Основное слово: ${fullWord(card)}`
+    : `Пока нет. Основное слово: ${fullWord(card)}${card.synonyms.length ? ` · синонимы: ${card.synonyms.join(', ')}` : ''}`;
+
+  card.status = isCorrect ? 'known' : 'repeat';
+  if (isCorrect) card.correctAnswers += 1;
+  else card.wrongAnswers += 1;
+  saveDecks();
+  renderDeckList();
+  renderCard();
+}
+
+function anotherExample() {
+  const card = getCurrentCard();
+  if (!card) return;
+  const next = generateExample(card);
+  card.activeGeneratedExample = next;
+  card.generatedExamples = [...(card.generatedExamples || []), next].slice(-8);
+  saveDecks();
+  state.revealed = true;
+  renderCard();
+}
+
+function renderDeckList() {
+  els.deckList.innerHTML = '';
+
+  if (!state.decks.length) {
+    els.deckList.innerHTML = '<p class="empty-state">Пока нет сохранённых колод. Вставьте список слов выше и нажмите «Создать карточки».</p>';
+    return;
+  }
+
+  state.decks.forEach((deck) => {
+    const node = els.deckItemTemplate.content.cloneNode(true);
+    const known = deck.cards.filter((card) => card.status === 'known').length;
+    const repeat = deck.cards.filter((card) => card.status === 'repeat').length;
+    const icon = node.querySelector('.deck-icon');
+    const lang = deck.language || 'en';
+    icon.textContent = lang === 'de' ? 'DE' : 'EN';
+    node.querySelector('h3').textContent = deck.name;
+    node.querySelector('p').textContent = `${languageConfig[lang]?.name || 'English'} · ${deck.cards.length} карточек · знаю ${known} · повторить ${repeat} · ${new Date(deck.createdAt).toLocaleDateString('ru-RU')}`;
+    node.querySelector('button').addEventListener('click', () => openDeck(deck.id));
+    els.deckList.appendChild(node);
+  });
+}
+
+function readFile(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    els.wordText.value = reader.result;
+    if (!els.deckName.value.trim()) {
+      els.deckName.value = file.name.replace(/\.[^.]+$/, '');
+    }
+    toast('Файл загружен. Выберите язык и создайте колоду.');
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+function loadCurrentSample(createImmediately = false) {
+  const lang = els.languageSelect.value || 'en';
+  els.wordText.value = samples[lang];
+  els.deckName.value = lang === 'de' ? 'Пример: Deutsch B2–C1 Wortschatz' : 'Пример: C1 active vocabulary';
+  if (createImmediately) createDeck();
+  else toast(lang === 'de' ? 'Немецкий пример вставлен' : 'Английский пример вставлен');
+}
+
+els.demoOpenBtn.addEventListener('click', () => loadCurrentSample(true));
+els.createDeckBtn.addEventListener('click', createDeck);
+els.loadSampleBtn.addEventListener('click', () => loadCurrentSample(false));
+els.clearInputBtn.addEventListener('click', () => {
+  els.wordText.value = '';
+  els.deckName.value = '';
+});
+els.languageSelect.addEventListener('change', () => {
+  const lang = els.languageSelect.value || 'en';
+  els.wordText.placeholder = lang === 'de'
+    ? 'die | Entwicklung | Fortschritt, Entfaltung | wirtschaftliche Entwicklung; rasante Entwicklung | развитие | Die wirtschaftliche Entwicklung hat sich deutlich beschleunigt.'
+    : 'mitigate | reduce, alleviate, soften | mitigate risk; mitigate the impact | смягчать | The new policy may mitigate the impact of rising costs.';
+});
+els.fileInput.addEventListener('change', (event) => {
+  const file = event.target.files?.[0];
+  if (file) readFile(file);
+});
+els.flashCard.addEventListener('click', revealCard);
+els.flashCard.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    revealCard();
+  }
+});
+els.nextBtn.addEventListener('click', () => moveCard(1));
+els.prevBtn.addEventListener('click', () => moveCard(-1));
+els.knownBtn.addEventListener('click', () => markCard('known'));
+els.repeatBtn.addEventListener('click', () => markCard('repeat'));
+els.shuffleBtn.addEventListener('click', shuffleActiveDeck);
+els.deleteDeckBtn.addEventListener('click', deleteActiveDeck);
+els.exportBtn.addEventListener('click', exportActiveDeck);
+els.speakBtn.addEventListener('click', speakCurrentWord);
+els.checkAnswerBtn.addEventListener('click', checkAnswer);
+els.anotherExampleBtn.addEventListener('click', (event) => {
+  event.stopPropagation();
+  anotherExample();
+});
+els.answerInput.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') checkAnswer();
+});
+
+document.querySelectorAll('.mode').forEach((btn) => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
+document.querySelectorAll('.filter').forEach((btn) => btn.addEventListener('click', () => setFilter(btn.dataset.filter)));
+
+document.addEventListener('keydown', (event) => {
+  if (!state.activeDeckId) return;
+  if (event.target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName)) return;
+  if (event.key === 'ArrowRight') moveCard(1);
+  if (event.key === 'ArrowLeft') moveCard(-1);
+  if (event.key === ' ') {
+    event.preventDefault();
+    revealCard();
+  }
+  if (event.key.toLowerCase() === 'k') markCard('known');
+  if (event.key.toLowerCase() === 'r') markCard('repeat');
+});
+
+renderDeckList();
+
+  </script>
+</body>
+</html>
